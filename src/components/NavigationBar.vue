@@ -13,7 +13,7 @@
       <a
         class="mr-3 mt-2 opacity-50 hover:opacity-100"
         target="_blank"
-        href="https://github.com/tudi2d"
+        href="https://github.com/tudi2d/guterpodcast"
         >github.</a
       >
       <router-link
