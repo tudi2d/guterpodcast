@@ -1,15 +1,5 @@
 <template>
   <div class="p-2">
-    <h2 class="">Randnotiz</h2>
-    <p>
-      Ich hab diese Website nach bestem Wissen und Gewissen programmiert für
-      Leute die genau soviel Spaß an Podcasts haben wie ich. Falls ihr Fehler
-      findet oder Fragen schreibt mir auf
-      <a class="underline" href="https://twitter.com/_tudi_">Twitter</a>, oder
-      erstellt einen Issue auf GitHub.
-    </p>
-    <div class="w-full border-white border-b-2 mt-4 mb-4"></div>
-
     <h2 class="">Impressum</h2>
 
     <div class="ml-2 mt-2">
