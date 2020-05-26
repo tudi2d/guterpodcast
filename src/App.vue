@@ -98,31 +98,32 @@ async function getDevices() {
   this.devices = devices;
 }
 
-async function onLogin() {
-  try {
-    const { accessToken, profile } = await spotifyLogin();
-    if (accessToken) {
-      this.accessToken = accessToken;
-      this.profile = profile;
-      if (isWebSDKWorking()) {
-        const webSDK = document.createElement("script");
-        webSDK.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
-        document.body.appendChild(webSDK);
-        window.onSpotifyWebPlaybackSDKReady = async () => {
-          const player = await initPlayer(accessToken);
-          player.addListener("ready", this.onPlayerReady);
-          player.addListener("player_state_changed", this.onPlayerStateChange);
-          player.addListener("initialization_error", ({ message }) => {
-            this.error = message;
-          });
-        };
-      } else {
-        this.getDevices();
-        this.addPlayerStateInterval();
-      }
+async function onLogin(accessToken = "") {
+  if (!accessToken) {
+    try {
+      accessToken = await spotifyLogin();
+    } catch (error) {
+      this.error = error;
     }
-  } catch (error) {
-    this.error = error;
+  }
+  if (accessToken) {
+    this.accessToken = accessToken;
+    if (isWebSDKWorking()) {
+      const webSDK = document.createElement("script");
+      webSDK.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
+      document.body.appendChild(webSDK);
+      window.onSpotifyWebPlaybackSDKReady = async () => {
+        const player = await initPlayer(accessToken);
+        player.addListener("ready", this.onPlayerReady);
+        player.addListener("player_state_changed", this.onPlayerStateChange);
+        player.addListener("initialization_error", ({ message }) => {
+          this.error = message;
+        });
+      };
+    } else {
+      this.getDevices();
+      this.addPlayerStateInterval();
+    }
   }
 }
 
@@ -386,6 +387,15 @@ export default {
   },
   computed: {
     showPlayer
+  },
+  watch: {
+    "$route.params": function() {
+      // Login in WebView
+      if (this.$route.params.access_token) {
+        console.log(this.$route.params);
+        this.onLogin(this.$route.params.access_token);
+      }
+    }
   },
   methods: {
     createTimeInterval,

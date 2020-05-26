@@ -1,4 +1,4 @@
-import { fetchSpotify } from "./SpotifyApi";
+import { isWebView } from "./helper";
 
 // Important! Changing the path needs a change in the Spotify API Dashboard!
 export const LOGIN_CALLBACK_URL = "/login/callback";
@@ -18,33 +18,34 @@ export const LOGIN_URL = `https://accounts.spotify.com/authorize?client_id=${CLI
 
 export function spotifyLogin() {
   return new Promise((resolve, reject) => {
-    const popup = window.open(
-      LOGIN_URL,
-      "_blank",
-      "width=700,height=750,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0"
-    );
-    if (popup) {
-      const location = window.location;
-
-      window.onmessage = async event => {
-        const { access_token: accessToken } = event.data;
-        if (accessToken) {
-          popup.postMessage("close", location);
-          try {
-            const profile = await fetchSpotify({
-              url: "/me",
-              accessToken
-            });
-            resolve({ accessToken, profile });
-          } catch (err) {
-            // PRIVACY BADGER OR ADBLOCKER BLOCKS SPOTIFY API REQUEST
-            reject("LOGIN_FAILED");
-          }
-        }
-      };
+    if (isWebView()) {
+      window.location = LOGIN_URL;
+      // no reject needed as there is a complete unmount
     } else {
-      // LOGIN OPENED IN TAB..
-      reject("LOGIN_FAILED");
+      const popup = window.open(
+        LOGIN_URL,
+        "_blank",
+        "width=700,height=750,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0"
+      );
+      if (popup) {
+        const location = window.location;
+
+        window.onmessage = async event => {
+          const { access_token: accessToken } = event.data;
+          if (accessToken) {
+            popup.postMessage("close", location);
+            try {
+              resolve(accessToken);
+            } catch (err) {
+              // PRIVACY BADGER OR ADBLOCKER BLOCKS SPOTIFY API REQUEST
+              reject("LOGIN_FAILED");
+            }
+          }
+        };
+      } else {
+        // LOGIN OPENED IN TAB..
+        reject("LOGIN_FAILED");
+      }
     }
   });
 }

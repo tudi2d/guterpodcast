@@ -27,6 +27,15 @@ export function isWebSDKWorking() {
   return !isMobile() && !isSafari();
 }
 
+/**
+ * Test if website is running in the in app browser of iOS or Android
+ */
+export function isWebView() {
+  return /^WebView|(iPhone|iPod|iPad)(?!.*Safari\/)|Android.*(wv|.0.0.0)/.test(
+    navigator.userAgent
+  );
+}
+
 export function msToTime(time) {
   function pad(n, z) {
     z = z || 2;

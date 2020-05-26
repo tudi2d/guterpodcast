@@ -75,6 +75,12 @@ export default {
     setShow,
     expandEpisode
   },
-  watch: { accessToken }
+  watch: { accessToken },
+  mounted() {
+    // If Website is in WebView the AccesToken is avaible on request
+    if (this.$props.accessToken) {
+      this.setShow();
+    }
+  }
 };
 </script>
