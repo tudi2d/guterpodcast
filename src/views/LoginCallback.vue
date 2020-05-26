@@ -3,17 +3,23 @@
 </template>
 
 <script>
-import { parseHash } from "../../utils/helper";
+import { parseHash, isWebView } from "../../utils/helper";
 
 function mounted() {
-  const origin = window.opener;
-  const location = window.location;
-  origin.postMessage(parseHash(window.location.hash), location);
-  window.onmessage = ({ data }) => {
-    if (data === "close") {
-      window.close();
-    }
-  };
+  const params = parseHash(window.location.hash);
+  if (isWebView()) {
+    // would be nice to have a store...
+    this.$router.push({ name: "Home", params });
+  } else {
+    const origin = window.opener;
+    const location = window.location;
+    origin.postMessage(params, location);
+    window.onmessage = ({ data }) => {
+      if (data === "close") {
+        window.close();
+      }
+    };
+  }
 }
 
 export default {
