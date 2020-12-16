@@ -5,7 +5,7 @@
 Listen to a Spotify podcast with integrated music, links & infos.
 This repository is (at the moment) specifically for the podcast Fest & Flauschig.
   
-![guterpodcast Demo GIF](https://cloud.hgnrth.de/s/RgBz93ceyfALNC3/download)
+![guterpodcast Demo GIF](https://cloud.hgnrth.de/s/p2B5yak2qDkxTBi/download)
 
 ## Note
 > Spotify announced ["Shows with Music"](https://newsroom.spotify.com/2020-10-14/spotify-launches-new-audio-experience-combining-music-and-talk-content/) which is exactly what I intended to build with **guterpodcast** but in way better - and natively integrated in the Spotify App. Give it a try - I personally like it a lot! As it is only avaible for selected original Spotify podcasts I won´t archive this project yet. On the other side there won´t be new features or bigger plans for extending this project in the future as there is a better solution now.
